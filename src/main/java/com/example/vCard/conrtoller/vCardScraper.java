@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class vCardScraper {
                     company.setPostalCode(getFieldFromJSONString(element.data(), "postalCode"));
                     company.setCountry(getFieldFromJSONString(element.data(), "addressCountry"));
                     company.setStreet(getFieldFromJSONString(element.data(), "streetAddress"));
-                    company.setLocality(getFieldFromJSONString(element.data(), "addressLocality"));
+                    company.setCity(getFieldFromJSONString(element.data(), "addressLocality"));
                     companies.add(company);
                     str.append(company);
                     System.out.println(company);
@@ -45,7 +46,20 @@ public class vCardScraper {
             }
         }
 
-        return str.toString();
+        StringBuilder vdfBuilder = new StringBuilder();
+        for (Company selectedCompany :
+                companies) {
+            vdfBuilder.append("BEGIN:VCARD\r\n");
+            vdfBuilder.append("VERSION:4.0\r\n");
+            vdfBuilder.append("ORG:" + selectedCompany.getName() + "\r\n");
+            vdfBuilder.append("TEL:" + selectedCompany.getTelephone() + "\r\n");
+            vdfBuilder.append("ADR:" + selectedCompany.getStreet() + " " + selectedCompany.getPostalCode() + "\r\n");
+            vdfBuilder.append("EMAIL:" + selectedCompany.getEmail() + "\r\n");
+            vdfBuilder.append("URL:" + selectedCompany.getUrl() + "\r\n");
+            vdfBuilder.append("END:VCARD\n\n");
+        }
+
+        return vdfBuilder.toString();
     }
 
     private String getFieldFromJSONString(String json, String field) {
