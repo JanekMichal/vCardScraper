@@ -57,7 +57,7 @@ public class vCardScraper {
             vcfBuilder[i].append("END:VCARD\n");
 
             try {
-                File file = new File("vcard" + i + ".vcf");
+                File file = new File("GeneratedCards/vcard" + i + ".vcf");
                 FileOutputStream fileOutputStream = new FileOutputStream(file);
                 fileOutputStream.write(vcfBuilder[i].toString().getBytes(StandardCharsets.UTF_8));
             } catch (IOException fileNotFoundException) {
