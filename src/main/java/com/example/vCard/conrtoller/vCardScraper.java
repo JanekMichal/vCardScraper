@@ -1,6 +1,7 @@
 package com.example.vCard.conrtoller;
 
 import com.example.vCard.Model.Company;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,7 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +53,16 @@ public class vCardScraper {
             vdfBuilder.append("TEL:").append(selectedCompany.getTelephone()).append("\r\n");
             vdfBuilder.append("ADR:").append(selectedCompany.getStreet()).append(" ").append(selectedCompany.getPostalCode()).append("\r\n");
             vdfBuilder.append("EMAIL:").append(selectedCompany.getEmail()).append("\r\n");
-            vdfBuilder.append("END:VCARD\n\n");
+            vdfBuilder.append("END:VCARD\n");
+        }
+
+
+        try {
+            File file = new File("vcard.vcf");
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            fileOutputStream.write(vdfBuilder.toString().getBytes(StandardCharsets.UTF_8));
+        } catch (IOException fileNotFoundException) {
+            fileNotFoundException.printStackTrace();
         }
 
         return vdfBuilder.toString();
