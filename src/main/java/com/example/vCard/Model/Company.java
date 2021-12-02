@@ -15,5 +15,4 @@ public class Company {
     String street;
     String city;
     String country;
-    String url;
 }

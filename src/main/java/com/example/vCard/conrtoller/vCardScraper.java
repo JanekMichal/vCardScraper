@@ -51,7 +51,6 @@ public class vCardScraper {
             vdfBuilder.append("TEL:").append(selectedCompany.getTelephone()).append("\r\n");
             vdfBuilder.append("ADR:").append(selectedCompany.getStreet()).append(" ").append(selectedCompany.getPostalCode()).append("\r\n");
             vdfBuilder.append("EMAIL:").append(selectedCompany.getEmail()).append("\r\n");
-            vdfBuilder.append("URL:").append(selectedCompany.getUrl()).append("\r\n");
             vdfBuilder.append("END:VCARD\n\n");
         }
 
