@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,6 @@ public class vCardScraper {
                 "&l=";
         Document doc = Jsoup.connect(stringBuilder).get();
 
-        StringBuilder str = new StringBuilder();
         List<Company> companies = new ArrayList<>();
         Elements elements = doc.select("script");
         for (Element element : elements) {
@@ -40,8 +38,6 @@ public class vCardScraper {
                     company.setStreet(getFieldFromJSONString(element.data(), "streetAddress"));
                     company.setCity(getFieldFromJSONString(element.data(), "addressLocality"));
                     companies.add(company);
-                    str.append(company);
-                    System.out.println(company);
                 }
             }
         }
@@ -51,11 +47,11 @@ public class vCardScraper {
                 companies) {
             vdfBuilder.append("BEGIN:VCARD\r\n");
             vdfBuilder.append("VERSION:4.0\r\n");
-            vdfBuilder.append("ORG:" + selectedCompany.getName() + "\r\n");
-            vdfBuilder.append("TEL:" + selectedCompany.getTelephone() + "\r\n");
-            vdfBuilder.append("ADR:" + selectedCompany.getStreet() + " " + selectedCompany.getPostalCode() + "\r\n");
-            vdfBuilder.append("EMAIL:" + selectedCompany.getEmail() + "\r\n");
-            vdfBuilder.append("URL:" + selectedCompany.getUrl() + "\r\n");
+            vdfBuilder.append("ORG:").append(selectedCompany.getName()).append("\r\n");
+            vdfBuilder.append("TEL:").append(selectedCompany.getTelephone()).append("\r\n");
+            vdfBuilder.append("ADR:").append(selectedCompany.getStreet()).append(" ").append(selectedCompany.getPostalCode()).append("\r\n");
+            vdfBuilder.append("EMAIL:").append(selectedCompany.getEmail()).append("\r\n");
+            vdfBuilder.append("URL:").append(selectedCompany.getUrl()).append("\r\n");
             vdfBuilder.append("END:VCARD\n\n");
         }
 
